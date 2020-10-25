@@ -16,17 +16,36 @@ def index():
 @app.route("/alert", methods=["POST"])
 def alert():
     data = request.get_json()
-    print(data)
+    for i in range(len(DEVICES)):
+        if DEVICES[i][0] == data[0]:
+            DEVICES[i] = data
+            socketio.emit("alert", DEVICES, broadcast=True)
+            return ""
     DEVICES.append(data)
-    print(DEVICES)
     socketio.emit("alert", DEVICES, broadcast=True)
     return ""
 
+@socketio.on("initialize")
+def start():
+    socketio.emit("start", DEVICES)
+    return ""
 
-@app.route('/service.js')
+@socketio.on("reset")
+def reset():
+    global DEVICES
+    DEVICES = []
+    return ""
+
+@app.route("/service.js")
 def service():
-    response=make_response(send_from_directory('static',filename='service.js'))
-    response.headers['Content-Type'] = 'application/javascript'
+    response = make_response(send_from_directory("static",filename="service.js"))
+    response.headers["Content-Type"] = "application/javascript"
+    return response
+
+@app.route("/sound.mp3")
+def sound():
+    response=make_response(send_from_directory("static",filename="sound.mp3"))
+    response.headers["Content-Type"] = "audio/mpeg"
     return response
 
 @app.context_processor

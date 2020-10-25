@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fiverr Notifications</title>
     <style>
-        #table-container {
+        #table-container table {
             width: 95%;
             text-align: center;
+            margin: 0.3em;
+            padding: 3px;
         }
         table, th, td {
             border: 1px solid black;
@@ -16,6 +18,8 @@
     </style>
 </head>
 <body>
+    <button id="mute">Start App</button>
+    <button id="reset">Reset</button>
     <div id="table-container"><div></div></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js" integrity="sha512-AcZyhRP/tbAEsXCCGlziPun5iFvcSUpEz2jKkx0blkYKbxU81F+iq8FURwPn1sYFeksJ+sDDrI5XujsqSobWdQ==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.0/howler.min.js" integrity="sha512-ALoawPS0JxHQ+8dGL7htZIlVNRaE/SN9gHD4G8pJJTi9H4BQ/3PjdvhggSGR34g00mvTPFkxQuveQUsJA5664Q==" crossorigin="anonymous"></script>

@@ -15,6 +15,7 @@ const displayNotification = (acc) => {
     }
 }
 
+
 const renderTable = arr => {
     const container = document.querySelector("#table-container")
     const table = document.createElement("table")
@@ -26,16 +27,22 @@ const renderTable = arr => {
         th.innerText = col
         headers.appendChild(th)
     })
-
     table.appendChild(headers)
-    arr.forEach(record => {
+
+    arr.forEach((record, i) => {
         if (!record) { return }
         const row = document.createElement("tr")
+        row.setAttribute("data-row", i)
         record.forEach(el => {
             const td = document.createElement("td")
             td.innerText = el
             row.appendChild(td)
         })
+        const button = document.createElement("button")
+        button.innerText = "X"
+        const td = document.createElement("td")
+        td.appendChild(button)
+        row.appendChild(td)
         table.appendChild(row)
     })
 
@@ -48,37 +55,44 @@ const main = async () => {
     navigator.serviceWorker
     .register('/service.js')
     .then(() =>  { console.log("Service Worker Registered") })
-    alert("Activate")
     Notification.requestPermission(function(status) {
         console.log('Notification permission status:', status)
     })
 
+    const audio = new Audio("sound.mp3")
+    audio.setAttribute("loop", "loop")
 
-    const socket = io()
-    socket.on("alert", (devices) => {
-        console.log(devices)
-        displayNotification(devices[devices.length - 1][0])
-        renderTable(devices)
-
-        const audio = new Audio("static/sound.mp3")
-        audio.setAttribute("loop", "loop")
-        audio.play()
+    document.querySelector("#mute").addEventListener("click", e => {
+        if (e.target.innerText === "Pause Alarm") {
+            audio.pause()
+        } else {
+            e.target.innerText = "Pause Alarm"
+        }
     })
 
+    const socket = io()
+    socket.emit("initialize")
+
+    document.querySelector("#reset").addEventListener("click", () => {
+        socket.emit("reset")
+        renderTable([])
+    })
+
+    socket.on("start", devices => {
+        if (devices && devices.length > 0) {
+            setTimeout(() => {
+                displayNotification(devices[devices.length - 1][0])
+                renderTable(devices)
+                audio.play()
+            }, 5000)
+        }
+    })
+
+    socket.on("alert", devices => {
+        displayNotification(devices[devices.length - 1][0])
+        renderTable(devices)
+        audio.play()
+    })
 }
 
 main()
-
-
-// const socket = io()
-
-// socket.on("connect", () => {
-//     document.body.style.background = "#000"
-//     alert("connected")
-// })
-
-// socket.on("data", data => alert(data["message"]))
-
-// b = document.querySelector("button")
-
-// b.addEventListener("click", () => socket.emit("act", {num: 2}))

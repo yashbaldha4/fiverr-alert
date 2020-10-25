@@ -42,4 +42,4 @@ def dated_url_for(endpoint, **values):
     return url_for(endpoint, **values)
 
 if __name__ == "__main__":
-    socketio.run(app, threaded=True)
+    socketio.run(app)

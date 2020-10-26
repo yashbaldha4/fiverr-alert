@@ -15,41 +15,6 @@ const displayNotification = (acc) => {
     }
 }
 
-
-const renderTable = arr => {
-    const container = document.querySelector("#table-container")
-    const table = document.createElement("table")
-    const headers = document.createElement("tr")
-    const cols = ["Account", "Unread Messages", "Remove"]
-
-    cols.forEach(col => {
-        const th = document.createElement("th")
-        th.innerText = col
-        headers.appendChild(th)
-    })
-    table.appendChild(headers)
-
-    arr.forEach((record, i) => {
-        if (!record) { return }
-        const row = document.createElement("tr")
-        row.setAttribute("data-row", i)
-        record.forEach(el => {
-            const td = document.createElement("td")
-            td.innerText = el
-            row.appendChild(td)
-        })
-        const button = document.createElement("button")
-        button.innerText = "X"
-        const td = document.createElement("td")
-        td.appendChild(button)
-        row.appendChild(td)
-        table.appendChild(row)
-    })
-
-    container.firstChild.replaceWith(table)
-}
-
-
 const main = async () => {
     check()
     navigator.serviceWorker
@@ -62,6 +27,8 @@ const main = async () => {
     const audio = new Audio("sound.mp3")
     audio.setAttribute("loop", "loop")
 
+    let DEVICES = []
+
     document.querySelector("#mute").addEventListener("click", e => {
         if (e.target.innerText === "Pause Alarm") {
             audio.pause()
@@ -73,24 +40,76 @@ const main = async () => {
     const socket = io()
     socket.emit("initialize")
 
+    const renderTable = () => {
+        const container = document.querySelector("#table-container")
+        const table = document.createElement("table")
+        const headers = document.createElement("tr")
+        const cols = ["Account", "Unread Messages", "Remove"]
+
+        cols.forEach(col => {
+            const th = document.createElement("th")
+            th.innerText = col
+            headers.appendChild(th)
+        })
+        table.appendChild(headers)
+
+        DEVICES.forEach((record, i) => {
+            if (!record || !record[2]) { return }
+            const row = document.createElement("tr")
+            row.setAttribute("data-row", i)
+            record.forEach((el, i) => {
+                if (i === 2) { return }
+                const td = document.createElement("td")
+                td.innerText = el
+                row.appendChild(td)
+            })
+
+            const button = document.createElement("button")
+            button.innerText = "X"
+            button.setAttribute("class", "btn btn-outline-danger")
+            button.addEventListener("click", e => {
+                const toDelete = e.target.parentNode.parentNode
+                const index = parseInt(toDelete.dataset.row)
+                socket.emit("delete", {"i": index})
+                DEVICES[index][2] = false
+                renderTable()
+            })
+
+            const td = document.createElement("td")
+            td.appendChild(button)
+            row.appendChild(td)
+            table.appendChild(row)
+        })
+        table.setAttribute("class", "table table-bordered")
+        container.firstChild.replaceWith(table)
+    }
+
     document.querySelector("#reset").addEventListener("click", () => {
+        DEVICES = []
         socket.emit("reset")
-        renderTable([])
+        audio.pause()
+        renderTable()
     })
 
     socket.on("start", devices => {
         if (devices && devices.length > 0) {
+            DEVICES = devices
             setTimeout(() => {
-                displayNotification(devices[devices.length - 1][0])
-                renderTable(devices)
-                audio.play()
+                devices.forEach(d => {
+                    if (d[2] === true) {
+                        displayNotification(d[0])
+                        audio.play()
+                    }
+                })
+                renderTable()
             }, 5000)
         }
     })
 
     socket.on("alert", devices => {
+        DEVICES = devices
         displayNotification(devices[devices.length - 1][0])
-        renderTable(devices)
+        renderTable()
         audio.play()
     })
 }

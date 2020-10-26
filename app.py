@@ -18,10 +18,10 @@ def alert():
     data = request.get_json()
     for i in range(len(DEVICES)):
         if DEVICES[i][0] == data[0]:
-            DEVICES[i] = data
+            DEVICES[i] = data + [True]
             socketio.emit("alert", DEVICES, broadcast=True)
             return ""
-    DEVICES.append(data)
+    DEVICES.append(data + [True])
     socketio.emit("alert", DEVICES, broadcast=True)
     return ""
 
@@ -34,6 +34,13 @@ def start():
 def reset():
     global DEVICES
     DEVICES = []
+    return ""
+
+@socketio.on("delete")
+def delete(data):
+    global DEVICES
+    i = data["i"]
+    DEVICES[i][2] = False
     return ""
 
 @app.route("/service.js")
@@ -61,4 +68,4 @@ def dated_url_for(endpoint, **values):
     return url_for(endpoint, **values)
 
 if __name__ == "__main__":
-    socketio.run(app)
+    socketio.run(app, debug=True)

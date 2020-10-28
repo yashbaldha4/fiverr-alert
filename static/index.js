@@ -30,6 +30,8 @@ const main = async () => {
     let DEVICES = []
     
     const mute = e => {
+        document.querySelector("#mute").removeEventListener("click", mute)
+        document.querySelector("#mute").removeEventListener("touchstart", mute)
         if (e.target.innerText === "Pause Alarm") {
             audio.pause()
         } else {
@@ -37,8 +39,9 @@ const main = async () => {
         }
     }
 
-    document.querySelector("#mute").addEventListener("click", e => mute(e))
-    document.querySelector("#mute").addEventListener("touchstart", e => mute(e))
+    document.querySelector("#mute").addEventListener("click", mute)
+    document.querySelector("#mute").addEventListener("touchstart", e => mute)
+    // document.querySelector("#mute").addEventListener("touchend", mute)
 
     const socket = io()
     socket.emit("initialize")
@@ -88,14 +91,17 @@ const main = async () => {
     }
 
     const reset = e => {
+        document.querySelector("#reset").removeEventListener("click", reset)
+        document.querySelector("#reset").removeEventListener("touchstart", reset)
         DEVICES = []
         socket.emit("reset")
         audio.pause()
         renderTable()
     }
 
-    document.querySelector("#reset").addEventListener("click", e => reset(e))
-    document.querySelector("#reset").addEventListener("touchstart", e => reset(e))
+    document.querySelector("#reset").addEventListener("click", reset)
+    document.querySelector("#reset").addEventListener("touchstart", reset)
+    // document.querySelector("#reset").addEventListener("touchend", e => reset(e))
 
     document.querySelector("#logout").addEventListener("click", () => {
         fetch("/logout", { method: "POST" }).then(() => window.location.reload())

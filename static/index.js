@@ -39,9 +39,19 @@ const main = async () => {
         }
     }
 
+    window.addEventListener("touchend", event => {
+        const el = document.querySelector("#mute")
+        if (el.target.innerText === "Pause Alarm") {
+            audio.pause()
+        } else {
+            el.target.innerText = "Pause Alarm"
+        }
+    })
+
     document.querySelector("#mute").addEventListener("click", mute)
     // document.querySelector("#mute").addEventListener("touchstart", e => mute)
     document.querySelector("#mute").addEventListener("touchend", mute)
+
 
     const socket = io()
     socket.emit("initialize")

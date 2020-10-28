@@ -41,10 +41,11 @@ const main = async () => {
 
     window.addEventListener("touchend", event => {
         const el = document.querySelector("#mute")
-        if (el.target.innerText === "Pause Alarm") {
+        console.log(el)
+        if (el.innerText === "Pause Alarm") {
             audio.pause()
         } else {
-            el.target.innerText = "Pause Alarm"
+            el.innerText = "Pause Alarm"
         }
     })
 

@@ -10,7 +10,7 @@ const check = () => {
 const displayNotification = (acc) => {
     if (Notification.permission == 'granted') {
         navigator.serviceWorker.getRegistration().then(function(reg) {
-        reg.showNotification("A new notification at " + acc , {vibrate: [100, 50, 100]})
+        reg.showNotification("New Notification at " + acc , {vibrate: [100, 50, 100]})
         })
     }
 }
@@ -89,6 +89,10 @@ const main = async () => {
         socket.emit("reset")
         audio.pause()
         renderTable()
+    })
+
+    document.querySelector("#logout").addEventListener("click", () => {
+        fetch("/logout", { method: "POST" }).then(() => window.location.reload())
     })
 
     socket.on("start", devices => {

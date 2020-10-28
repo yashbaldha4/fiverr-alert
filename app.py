@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, make_response, send_from_directory, request
+from flask import Flask, render_template, redirect, url_for, make_response, send_from_directory, request, session, flash
 from flask_socketio import SocketIO
 from flask_cors import CORS
 import os
@@ -6,16 +6,37 @@ import os
 DEVICES = []
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = os.urandom(16)
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 @app.route("/")
 def index():
-    return render_template("index.html", devices=DEVICES)
+    if "user" in session or not os.environ.get("PASS"):
+        return render_template("index.html")
+    else:
+        return render_template("signin.html")
+
+@app.route("/login", methods=["POST"])
+def login():
+    secret = os.environ.get("PASS")
+    password = request.form.get("password")
+    if password == secret or not secret:
+        session["user"] = secret
+    else:
+        flash("Wrong Password!")
+    return(redirect(url_for("index")))
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    session.clear()
+    return ""
 
 @app.route("/alert", methods=["POST"])
 def alert():
     data = request.get_json()
+    if not data or len(data) != 2: return ""
+
     for i in range(len(DEVICES)):
         if DEVICES[i][0] == data[0]:
             DEVICES[i] = data + [True]

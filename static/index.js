@@ -28,14 +28,17 @@ const main = async () => {
     audio.setAttribute("loop", "loop")
 
     let DEVICES = []
-
-    document.querySelector("#mute").addEventListener("click", e => {
+    
+    const mute = e => {
         if (e.target.innerText === "Pause Alarm") {
             audio.pause()
         } else {
             e.target.innerText = "Pause Alarm"
         }
-    })
+    }
+
+    document.querySelector("#mute").addEventListener("click", e => mute(e))
+    document.querySelector("mute").addEventListener("touchstart", e => mute(e))
 
     const socket = io()
     socket.emit("initialize")
@@ -84,12 +87,15 @@ const main = async () => {
         container.firstChild.replaceWith(table)
     }
 
-    document.querySelector("#reset").addEventListener("click", () => {
+    const reset = e => {
         DEVICES = []
         socket.emit("reset")
         audio.pause()
         renderTable()
-    })
+    }
+
+    document.querySelector("#reset").addEventListener("click", e => reset(e))
+    document.querySelector("#reset").addEventListener("touchstart", e => reset(e))
 
     document.querySelector("#logout").addEventListener("click", () => {
         fetch("/logout", { method: "POST" }).then(() => window.location.reload())

@@ -38,7 +38,7 @@ const main = async () => {
     }
 
     document.querySelector("#mute").addEventListener("click", e => mute(e))
-    document.querySelector("mute").addEventListener("touchstart", e => mute(e))
+    document.querySelector("#mute").addEventListener("touchstart", e => mute(e))
 
     const socket = io()
     socket.emit("initialize")

@@ -30,8 +30,8 @@ const main = async () => {
     let DEVICES = []
     
     const mute = e => {
-        // document.querySelector("#mute").removeEventListener("click", mute)
-        // document.querySelector("#mute").removeEventListener("touchstart", mute)
+        document.querySelector("#mute").removeEventListener("click", mute)
+        document.querySelector("#mute").removeEventListener("touchstart", mute)
         if (e.target.innerText === "Pause Alarm") {
             audio.pause()
         } else {
@@ -39,20 +39,9 @@ const main = async () => {
         }
     }
 
-    window.addEventListener("touchend", event => {
-        const el = document.querySelector("#mute")
-        console.log(el)
-        if (el.innerText === "Pause Alarm") {
-            audio.pause()
-        } else {
-            el.innerText = "Pause Alarm"
-        }
-    })
-
     document.querySelector("#mute").addEventListener("click", mute)
-    // document.querySelector("#mute").addEventListener("touchstart", e => mute)
-    document.querySelector("#mute").addEventListener("touchend", mute)
-
+    document.querySelector("#mute").addEventListener("touchstart", e => mute)
+    // document.querySelector("#mute").addEventListener("touchend", mute)
 
     const socket = io()
     socket.emit("initialize")
@@ -102,6 +91,7 @@ const main = async () => {
     }
 
     const reset = e => {
+        e.preventDefault()
         DEVICES = []
         socket.emit("reset")
         audio.pause()
@@ -109,8 +99,8 @@ const main = async () => {
     }
 
     document.querySelector("#reset").addEventListener("click", reset)
-    // document.querySelector("#reset").addEventListener("touchstart", reset)
-    document.querySelector("#reset").addEventListener("touchend", reset)
+    document.querySelector("#reset").addEventListener("touchstart", reset)
+    // document.querySelector("#reset").addEventListener("touchend", e => reset(e))
 
     document.querySelector("#logout").addEventListener("click", () => {
         fetch("/logout", { method: "POST" }).then(() => window.location.reload())

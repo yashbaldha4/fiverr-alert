@@ -43,7 +43,7 @@ const main = async () => {
     // document.querySelector("#mute").addEventListener("touchstart", e => mute)
     // document.querySelector("#mute").addEventListener("touchend", mute)
 
-    const socket = io().listen(80)
+    const socket = io()
     socket.emit("initialize")
 
     const renderTable = () => {
@@ -104,11 +104,17 @@ const main = async () => {
 
     document.querySelector("#logout").addEventListener("click", () => {
         alert("logged out")
+        const h = document.createElement("h3")
+        h.innerText = "Logged out"
+        document.querySelector("body").appendChild(h)
         fetch("/logout", { method: "POST" }).then(() => window.location.reload())
     })
 
     socket.on("start", devices => {
         alert("SocketIO works")
+        const h = document.createElement("h3")
+        h.innerText = "SocketIO works"
+        document.querySelector("body").appendChild(h)
         if (devices && devices.length > 0) {
             DEVICES = devices
             setTimeout(() => {

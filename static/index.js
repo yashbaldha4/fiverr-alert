@@ -103,6 +103,7 @@ const main = async () => {
     // document.querySelector("#reset").addEventListener("touchend", e => reset(e))
 
     document.querySelector("#logout").addEventListener("click", () => {
+        alert("logged out")
         fetch("/logout", { method: "POST" }).then(() => window.location.reload())
     })
 

@@ -16,14 +16,6 @@ const displayNotification = (acc) => {
 }
 
 const main = async () => {
-    check()
-    navigator.serviceWorker
-    .register('/service.js')
-    .then(() =>  { console.log("Service Worker Registered") })
-    Notification.requestPermission(function(status) {
-        console.log('Notification permission status:', status)
-    })
-
     const audio = new Audio("sound.mp3")
     audio.setAttribute("loop", "loop")
 
@@ -125,5 +117,12 @@ const main = async () => {
 }
 
 window.addEventListener("load", () => {
+    check()
+    navigator.serviceWorker
+    .register('/service.js')
+    .then(() =>  { console.log("Service Worker Registered") })
+    Notification.requestPermission(function(status) {
+        console.log('Notification permission status:', status)
+    })
     main()
 })

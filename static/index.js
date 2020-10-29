@@ -40,10 +40,10 @@ const main = async () => {
     }
 
     document.querySelector("#mute").addEventListener("click", mute)
-    document.querySelector("#mute").addEventListener("touchstart", e => mute)
+    // document.querySelector("#mute").addEventListener("touchstart", e => mute)
     // document.querySelector("#mute").addEventListener("touchend", mute)
 
-    const socket = io()
+    const socket = io().listen(80)
     socket.emit("initialize")
 
     const renderTable = () => {
@@ -99,7 +99,7 @@ const main = async () => {
     }
 
     document.querySelector("#reset").addEventListener("click", reset)
-    document.querySelector("#reset").addEventListener("touchstart", reset)
+    // document.querySelector("#reset").addEventListener("touchstart", reset)
     // document.querySelector("#reset").addEventListener("touchend", e => reset(e))
 
     document.querySelector("#logout").addEventListener("click", () => {

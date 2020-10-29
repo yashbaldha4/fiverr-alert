@@ -1,7 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, make_response, send_from_directory, request, session, flash
 from flask_socketio import SocketIO
 from flask_cors import CORS
-from flask_talisman import Talisman
 import os
 
 DEVICES = []
@@ -9,7 +8,6 @@ DEVICES = []
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(16)
 CORS(app)
-Talisman(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 @app.route("/")

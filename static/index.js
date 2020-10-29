@@ -129,4 +129,7 @@ const main = async () => {
     })
 }
 
-main()
+window.addEventListener("load", () => {
+    alert("Hello, World!")
+    main()
+})

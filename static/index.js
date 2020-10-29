@@ -117,12 +117,14 @@ const main = async () => {
 }
 
 window.addEventListener("load", () => {
-    check()
-    navigator.serviceWorker
-    .register('/service.js')
-    .then(() =>  { console.log("Service Worker Registered") })
-    Notification.requestPermission(function(status) {
-        console.log('Notification permission status:', status)
-    })
+    if( !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        check()
+        navigator.serviceWorker
+        .register("/service.js")
+        .then(() =>  { console.log("Service Worker Registered") })
+        Notification.requestPermission(function(status) {
+            console.log("Notification permission status:", status)
+        })
+    }
     main()
 })

@@ -1,28 +1,28 @@
-// const check = () => {
-//     if (!("serviceWorker" in navigator)) {
-//       throw new Error('No Service Worker support!')
-//     }
-//     if (!("PushManager" in window)) {
-//       throw new Error('No Push API Support!')
-//     }
-// }
+const check = () => {
+    if (!("serviceWorker" in navigator)) {
+      throw new Error("No Service Worker support!")
+    }
+    if (!("PushManager" in window)) {
+      throw new Error("No Push API Support!")
+    }
+}
 
-// const displayNotification = (acc) => {
-//     if (Notification.permission == 'granted') {
-//         navigator.serviceWorker.getRegistration().then(function(reg) {
-//         reg.showNotification("New Notification at " + acc , {vibrate: [100, 50, 100]})
-//         })
-//     }
-// }
+const displayNotification = (acc) => {
+    if (Notification.permission == "granted") {
+        navigator.serviceWorker.getRegistration().then(function(reg) {
+        reg.showNotification("New Notification at " + acc , {vibrate: [100, 50, 100]})
+        })
+    }
+}
 
 const main = async () => {
-    // check()
-    // navigator.serviceWorker
-    // .register('/service.js')
-    // .then(() =>  { console.log("Service Worker Registered") })
-    // Notification.requestPermission(function(status) {
-    //     console.log('Notification permission status:', status)
-    // })
+    check()
+    navigator.serviceWorker
+    .register('/service.js')
+    .then(() =>  { console.log("Service Worker Registered") })
+    Notification.requestPermission(function(status) {
+        console.log('Notification permission status:', status)
+    })
 
     const audio = new Audio("sound.mp3")
     audio.setAttribute("loop", "loop")
@@ -38,10 +38,7 @@ const main = async () => {
             e.target.innerText = "Pause Alarm"
         }
     }
-
     document.querySelector("#mute").addEventListener("click", mute)
-    // document.querySelector("#mute").addEventListener("touchstart", e => mute)
-    // document.querySelector("#mute").addEventListener("touchend", mute)
 
     const socket = io()
     socket.emit("initialize")
@@ -86,6 +83,7 @@ const main = async () => {
             row.appendChild(td)
             table.appendChild(row)
         })
+        if (!DEVICES.filter(d => d[2]).length) { audio.pause() }
         table.setAttribute("class", "table table-bordered")
         container.firstChild.replaceWith(table)
     }
@@ -97,30 +95,19 @@ const main = async () => {
         audio.pause()
         renderTable()
     }
-
     document.querySelector("#reset").addEventListener("click", reset)
-    // document.querySelector("#reset").addEventListener("touchstart", reset)
-    // document.querySelector("#reset").addEventListener("touchend", e => reset(e))
 
     document.querySelector("#logout").addEventListener("click", () => {
-        alert("logged out")
-        const h = document.createElement("h3")
-        h.innerText = "Logged out"
-        document.querySelector("body").appendChild(h)
         fetch("/logout", { method: "POST" }).then(() => window.location.reload())
     })
 
     socket.on("start", devices => {
-        alert("SocketIO works")
-        const h = document.createElement("h3")
-        h.innerText = "SocketIO works"
-        document.querySelector("body").appendChild(h)
         if (devices && devices.length > 0) {
             DEVICES = devices
             setTimeout(() => {
                 devices.forEach(d => {
                     if (d[2] === true) {
-                        // displayNotification(d[0])
+                        if (Notification.permission == "granted") { displayNotification(d[0]) }
                         audio.play()
                     }
                 })
@@ -131,7 +118,7 @@ const main = async () => {
 
     socket.on("alert", devices => {
         DEVICES = devices
-        // displayNotification(devices[devices.length - 1][0])
+        if (Notification.permission == "granted") { displayNotification(devices[devices.length - 1][0]) }
         renderTable()
         audio.play()
     })

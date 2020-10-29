@@ -107,6 +107,7 @@ const main = async () => {
     })
 
     socket.on("start", devices => {
+        alert("SocketIO works")
         if (devices && devices.length > 0) {
             DEVICES = devices
             setTimeout(() => {

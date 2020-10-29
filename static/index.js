@@ -1,28 +1,28 @@
-const check = () => {
-    if (!("serviceWorker" in navigator)) {
-      throw new Error('No Service Worker support!')
-    }
-    if (!("PushManager" in window)) {
-      throw new Error('No Push API Support!')
-    }
-}
+// const check = () => {
+//     if (!("serviceWorker" in navigator)) {
+//       throw new Error('No Service Worker support!')
+//     }
+//     if (!("PushManager" in window)) {
+//       throw new Error('No Push API Support!')
+//     }
+// }
 
-const displayNotification = (acc) => {
-    if (Notification.permission == 'granted') {
-        navigator.serviceWorker.getRegistration().then(function(reg) {
-        reg.showNotification("New Notification at " + acc , {vibrate: [100, 50, 100]})
-        })
-    }
-}
+// const displayNotification = (acc) => {
+//     if (Notification.permission == 'granted') {
+//         navigator.serviceWorker.getRegistration().then(function(reg) {
+//         reg.showNotification("New Notification at " + acc , {vibrate: [100, 50, 100]})
+//         })
+//     }
+// }
 
 const main = async () => {
-    check()
-    navigator.serviceWorker
-    .register('/service.js')
-    .then(() =>  { console.log("Service Worker Registered") })
-    Notification.requestPermission(function(status) {
-        console.log('Notification permission status:', status)
-    })
+    // check()
+    // navigator.serviceWorker
+    // .register('/service.js')
+    // .then(() =>  { console.log("Service Worker Registered") })
+    // Notification.requestPermission(function(status) {
+    //     console.log('Notification permission status:', status)
+    // })
 
     const audio = new Audio("sound.mp3")
     audio.setAttribute("loop", "loop")
@@ -120,7 +120,7 @@ const main = async () => {
             setTimeout(() => {
                 devices.forEach(d => {
                     if (d[2] === true) {
-                        displayNotification(d[0])
+                        // displayNotification(d[0])
                         audio.play()
                     }
                 })
@@ -131,7 +131,7 @@ const main = async () => {
 
     socket.on("alert", devices => {
         DEVICES = devices
-        displayNotification(devices[devices.length - 1][0])
+        // displayNotification(devices[devices.length - 1][0])
         renderTable()
         audio.play()
     })

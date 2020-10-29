@@ -132,4 +132,5 @@ const main = async () => {
 window.addEventListener("load", () => {
     alert("Hello, World!")
     main()
+    alert("Hello, Again!")
 })

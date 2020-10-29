@@ -10,7 +10,8 @@ const check = () => {
 const displayNotification = (acc) => {
     if (Notification.permission == "granted") {
         navigator.serviceWorker.getRegistration().then(function(reg) {
-        reg.showNotification("New Notification at " + acc , {vibrate: [100, 50, 100]})
+        reg.showNotification("You have a new notification ",
+            {vibrate: [100, 50, 100], icon: acc})
         })
     }
 }
@@ -22,8 +23,6 @@ const main = async () => {
     let DEVICES = []
     
     const mute = e => {
-        document.querySelector("#mute").removeEventListener("click", mute)
-        document.querySelector("#mute").removeEventListener("touchstart", mute)
         if (e.target.innerText === "Pause Alarm") {
             audio.pause()
         } else {
@@ -55,7 +54,14 @@ const main = async () => {
             record.forEach((el, i) => {
                 if (i === 2) { return }
                 const td = document.createElement("td")
-                td.innerText = el
+                if (i === 0) {
+                    const img = document.createElement("img")
+                    img.setAttribute("src", el)
+                    img.setAttribute("alt", "")
+                    td.appendChild(img)
+                } else {
+                    td.innerText = el
+                }
                 row.appendChild(td)
             })
 

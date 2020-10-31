@@ -116,7 +116,9 @@ const main = async () => {
 
     socket.on("alert", devices => {
         DEVICES = devices
-        if (Notification.permission == "granted") { displayNotification(devices[devices.length - 1][0]) }
+        if (Notification.permission == "granted") {
+            devices.filter(d => d[2]).forEach(dev => displayNotification(dev[0]))
+        }
         renderTable()
         audio.play()
     })

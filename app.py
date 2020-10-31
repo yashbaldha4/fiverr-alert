@@ -76,6 +76,10 @@ def sound():
     response.headers["Content-Type"] = "audio/mpeg"
     return response
 
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+
 @app.context_processor
 def override_url_for():
     return dict(url_for=dated_url_for)

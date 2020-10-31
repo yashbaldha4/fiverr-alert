@@ -6,7 +6,7 @@ import os
 DEVICES = []
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = os.urandom(16)
+app.config["SECRET_KEY"] = "ABCDEFGHIJKLMNOPQRSTUVWX"
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 

@@ -32,7 +32,7 @@ const main = async () => {
     document.querySelector("#mute").addEventListener("click", mute)
 
     const socket = io()
-    socket.emit("initialize")
+    socket.on("connect", () => socket.emit("initialize"))
 
     const renderTable = () => {
         const container = document.querySelector("#table-container")

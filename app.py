@@ -8,7 +8,7 @@ DEVICES = []
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "ABCDEFGHIJKLMNOPQRSTUVWX"
 CORS(app)
-socketio = SocketIO(app, cors_allowed_origins="*", ping_interval=3600000)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 @app.route("/")
 def index():

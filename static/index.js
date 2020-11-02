@@ -138,6 +138,9 @@ window.addEventListener("load", () => {
         Notification.requestPermission(function(status) {
             console.log("Notification permission status:", status)
         })
+    } else {
+        const noSleep = new NoSleep()
+        noSleep.enable()
     }
     main()
 })

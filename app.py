@@ -57,10 +57,6 @@ def reset():
     DEVICES = []
     return ""
 
-@socketio.on("disconnect")
-def disconnect():
-    print("Client Disconnected")
-
 @socketio.on("delete")
 def delete(data):
     global DEVICES

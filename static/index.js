@@ -122,6 +122,11 @@ const main = async () => {
         renderTable()
         audio.play()
     })
+
+    setInterval(() => {
+        socket.send("2")
+        console.log("ping")
+    }, 22000)
 }
 
 window.addEventListener("load", () => {

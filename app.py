@@ -70,6 +70,18 @@ def service():
     response.headers["Content-Type"] = "application/javascript"
     return response
 
+@app.route("/manifest.json")
+def service():
+    response = make_response(send_from_directory("static",filename="manifest.json"))
+    response.headers["Content-Type"] = "application/json"
+    return response
+
+@app.route("/sw.js")
+def service():
+    response = make_response(send_from_directory("static",filename="sw.js"))
+    response.headers["Content-Type"] = "application/javascript"
+    return response
+
 @app.route("/sound.mp3")
 def sound():
     response=make_response(send_from_directory("static",filename="sound.mp3"))

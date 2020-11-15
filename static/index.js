@@ -143,5 +143,5 @@ window.addEventListener("load", () => {
         noSleep.enable()
     }
     main()
-    setTimeout(() => document.querySelector("#mute").click(), 5000)
+    setTimeout(() => document.querySelector("#mute").click(), 3000)
 })
